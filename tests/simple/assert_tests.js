@@ -1,23 +1,23 @@
 // Requires simple/assert.js and simple/testing.js
 
-test("equals_failing", function() {
+function testEqualsFailing() {
   try {
     assertEqual("foo", "bar");
     failTest("Should have thrown.");
   } catch (err) {
     assertNotEqual(err.message, "Should have thrown.");
   }
-});
+}
 
-test("equals_passing", function() {
+function testEqualsPassing() {
   assertEqual("foo", "foo");
-});
+}
 
-test("not_equals_passing", function() {
+function testNotEqualsFailing() {
   assertNotEqual("foo", "bar");
-});
+}
 
-test("failing with message", function() {
+function testFailingWithMessage() {
   try {
     assertEqual("foo", "bar", "Forced failure");
     failTest("Should have thrown.");
@@ -27,13 +27,13 @@ test("failing with message", function() {
          err.message.startsWith("Forced failure"),
         "Should have started with 'Forced Failure'");
   }
-});
+}
 
-test("testing_true", function() {
+function testAssertingTrue() {
   assertTrue(true);
-});
+}
 
-test("testing_false", function() {
+function testAssertingTrueFailing() {
   try {
     assertTrue(false, "Forced failure");
     failTest("Should have thrown.");
@@ -43,19 +43,22 @@ test("testing_false", function() {
          err.message.startsWith("Forced failure"),
         "Should have started with 'Forced Failure'");
   }
+}
 
-});
-
-test("demonstrate_failure", function() {
+function testFailing_Demonstration() {
   assertFalse(true, "Some explanation");
-});
+}
 
-test("demonstrate_error", function() {
+function testError_Demonstration() {
   var blah = {
     name: "blah"
   }
   assertEqual(blah.name(), "blah"); // should error, since name() doesn't exist.
-});
+}
 
+
+test("test with custom name", function() {
+  assertEqual("foo", "bar", "Some explanation");
+});
 
 runTests(true);

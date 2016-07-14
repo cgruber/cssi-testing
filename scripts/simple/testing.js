@@ -46,6 +46,8 @@ var log = function(message) {
  * param: showSuccesses - if true, list out successful tests also.
  */
 function runTests(showSuccesses) {
+  registerTests(this);
+
   // Take the function list and store it locally, resetting the main one.
   var testFunctions = __testFunctions;
   __testFunctions = [];
@@ -97,4 +99,25 @@ function runTests(showSuccesses) {
       + " Successes: " + (count - failures - errors)
       + " Failures: " + failures
       + " Errors: " + errors);
+}
+
+/*
+ * An ease-of-use extension to simple/testing.js which looks for any globally
+ * scoped test functions and registers them.  Functions will be registered if
+ * they start with the word test, and have no arguments listed.  e.g.:
+ *     function testFoo() { blah; blah; }
+ */
+function registerTests(scope) {
+  for (var property in scope) {
+    if (property.startsWith("test") && property != "test") {
+      var func = scope[property];
+      if (typeof(func) == "function") {
+        var description = func.name
+            .replace(/[_]?([A-Z])/g, ' $1')
+            .substring(5) // strip "test "
+            .toLowerCase()
+        test(description, func);
+      }
+    }
+  }
 }
