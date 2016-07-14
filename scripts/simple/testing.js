@@ -61,10 +61,10 @@ function runTests(showSuccesses) {
     } catch(error) {
       if (error.name && error.name == "TestFailure") {
         results.push(
-            {status: "FAILED", name: testFunction.name, message: error});
+            {status: "FAILED", name: testFunction.name, message: error.message});
       } else {
         results.push(
-            {status: "ERROR", name: testFunction.name, message: error});
+            {status: "ERROR", name: testFunction.name, message: error.message});
       }
     }
   }

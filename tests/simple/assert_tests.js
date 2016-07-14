@@ -46,4 +46,8 @@ test("testing_false", function() {
 
 });
 
+test("demonstrate_failure", function() {
+  assertFalse(true, "Some explanation");
+});
+
 runTests(true);
