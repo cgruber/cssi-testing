@@ -7,9 +7,20 @@
 <script type="text/javascript" src="tests/simple/assert_tests.js"></script>
 </head>
 <body>
-<h1>Simple host page for testing library</h1>
+<h1>A bare-bones testing system for client-side javascript</h1>
+<p>simple-testing is a quick and dirty unit-testing library for javscript.
+   It is intended for use by students learning Javascript in the browser,
+   though it can be used by anyone in any javascript context.</p>
+<p>The runner is similar to other xUnit-style runners, but is solely focused
+   on the test itself, leaving setup/teardown of tests to each test method.</p>
 
-<p>To use this, include the following script lines</p>
+<div style="float: right;">
+  <table id="consoleLog">
+    <tr><th>Test Output</th></tr>
+  </table>
+</div>
+<h2>Usage:</h2>
+<p>To use this library, include the following script lines</p>
 
 <pre><code>
   &lt;script
@@ -19,6 +30,141 @@
       type="text/javascript"
       src="https://cgruber.github.io/cssi-testing/scripts/simple/testing.js">&lt;/script>
 </code></pre>
-<div class="consoleLog"></div>
+
+<p>At its simplest, a test is simply a method that the runner will exceute,
+   checking for errors or "failed assertions".  Test methods generally will
+   follow the steps:<ul><dl>
+     <dt>arrange
+     <dd>Arranging the test involves setting up things that aren't the test itself,
+         but are preconditions for the test to be executed.  This can be preparing
+         the expected data, setting up any code upon which the tested code depends,
+         etc.
+     <dt>execute
+     <dd>Execution should be the simplest - just execute the beviour you're testing.
+     <dt>verify
+     <dd>Verify is where you check to see if the results match the expectations.
+         This is usually done via "assertion" methods, such as
+         <code>assertEquals(actual, "foo");</code>. simple-testing comes with a
+         default set of simple assertions you can use in your tests.
+   </dl></ul>
+
+<h3>Example</h3>
+<h4>Basic Test</h4>
+<p>Imagine you have a simple function <code>factorial(num)</code>
+<pre><code>
+    // simple recursive factorial function
+    function factorial(num) {
+      if (num === 0) {
+        return 1;
+      } else {
+        return num * factorial(num - 1);
+      }
+    }
+</code></pre>
+<p>It is important to make sure that this is tested.  With simple-testing you
+   can trivially write test functions to test this function.  For example:
+   <pre><code>
+     function testZero() {
+       var expected = 1; // arrange
+
+       var actual = factorial(0); // execute
+
+       assertEquals(actual, expected, "factorial(0) should be 1"); // verify
+     }
+   </code></pre>
+<p>This basic from can be shortened if the setup is trivial, like this:
+  <pre><code>
+    function testZero() {
+      assertEquals(factorial(0), 1);
+    }
+  </code></pre>
+  The three steps are implied in this case, and not on separate lines.
+<p>To excecute the tests, the <code>runTests()</code> method should be called,
+   or no tests will be executed.
+<p>Here is a good starter set of test cases.
+   <pre><code>
+     function testFactorialZero() {
+       assertEquals(factorial(0), 1);
+     }
+     function testFactorialOne() {
+       assertEquals(factorial(1), 1);
+     }
+     function testFactorialTwo() {
+       assertEquals(factorial(2), 2);
+     }
+     function testFactorialThree() {
+       assertEquals(factorial(3), 6);
+     }
+     function testFactorialSix() {
+       assertEquals(factorial(6), 120);
+     }
+     runTests();
+   </code></pre>
+<h4>Testing error cases</h4>
+<p>It is good practice to consider the full range of inputs to a function, and
+   test all of the relevant cases.  This includes unreasonable input and
+   error cases. In the case of factorial, it only works on integers, so one
+   should add some additional test cases to verify that the function throws
+   an error when faced with bad data.
+ <p>The pattern we use is the <strong>try/fail/catch</strong> pattern where
+    we try the logic, catch the error and check that the right error message
+    is found. If the function doesn't throw an error, we force the test to fail.
+   <pre><code>
+     function testFactorialNegative() {
+       try {
+         factorial(-1);
+         failTest("Should have thrown an error");
+       } catch (err) {
+         assertEqual(err.message, "Cannot run factorial on a negative")
+       }
+     }
+     function testFactorialNonNumber() {
+       try {
+         factorial("");
+         failTest("Should have thrown an error");
+       } catch (err) {
+         assertEqual(err.message, "Cannot run factorial on anything but int")
+       }
+     }
+     function testFactorialNonIntegerNumber() {
+       try {
+         factorial(2.2);
+         failTest("Should have thrown an error");
+       } catch (err) {
+         assertEqual(err.message, "Cannot run factorial on anything but int")
+       }
+     }
+     runTests(true); // true == show succeeding tests.
+   </code></pre>
+<p>It is very important to remember to <em>only</em> wrap the try/catch block
+   around the call to the method that is expected to throw the error, and to
+   force the test to fail if the error is not thrown.  If you don't put
+   <code>failTest("some message")</code> after the method call that should
+   fail, it is possible that the test will exit, and then the test runner
+   will assume the test passed.
+<p>These tests will fail with the original implementation of
+   <code>factorial(num)</code>.  We didn't code it to account for bad values.
+   To fix it up, and make these tests pass, we need to do something like this:
+
+<h4>References</h4>
+<p>To run the full javascript file with these examples,
+   <a href="examples/simple/factorial.html">click on factorial.html</a>.  To
+   view the underlying javascript file being tested,
+   <a href="examples/simple/factorial.js">click on factorial.js</a>.
+   <pre><code>
+     function factorial(num) {
+       // Only allow integers!
+       if (typeof(num) != "number" || num % 1 !== 0) {
+         throw new Error("Cannot run factorial on anything but int");
+       }
+       if (num < 0) {
+         throw new Error("Cannot run factorial on a negative");
+       } else if (num === 0) {
+         return 1;
+       } else {
+         return num * factorial(num - 1);
+       }
+     }
+   </code></pre>
 </body>
 </html>
