@@ -101,5 +101,8 @@ TestSuite.prototype.run = function(showSuccesses) {
       this.log(result.stack);
     }
   }
-  this.log("Tests: " + count + " Failed: " + failures + " Errors: " + errors);
+  this.log("Tests: " + count
+      + " Successes: " + (count - failures - errors)
+      + " Failures: " + failures
+      + " Errors: " + errors);
 }

@@ -26,7 +26,7 @@ suite.test("failing with message", function() {
   } catch (err) {
     assert.notEqual(err.message, "Should have thrown.");
     assert.true(
-         err.message.startsWith("Forced failure"), 
+         err.message.startsWith("Forced failure"),
         "Should have started with 'Forced Failure'");
   }
 });
@@ -42,16 +42,10 @@ suite.test("testing_false", function() {
   } catch (err) {
     assert.notEqual(err.message, "Should have thrown.");
     assert.true(
-         err.message.startsWith("Forced failure"), 
+         err.message.startsWith("Forced failure"),
         "Should have started with 'Forced Failure'");
   }
 
 });
 
-var element = document.querySelector('.consoleLog');
-console.log("Element" + element);
-//suite.registerLogElement(element);
-//console.log(suite._log);
 suite.run(true);
-console.log(console.name);
-console.log(console)

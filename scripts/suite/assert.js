@@ -1,4 +1,4 @@
-// module "simple_assert.js"
+// module "assert.js"
 
 /*
  * A set of assertion methods which will throw a TestFailure error if their
@@ -18,31 +18,31 @@ TestFailure.prototype = Error.prototype;
  */
 function Assertions() {}
 
-Assertion.prototype.equal = function(actual, expected, message) {
+Assertions.prototype.equal = function(actual, expected, message) {
   if (!(actual == expected)) {
-    failTest("Expected: " + expected + " but was: " + actual, message);
+    this.fail("Expected: " + expected + " but was: " + actual, message);
   }
 }
 
-Assertion.prototype.notEqual = function(actual, expected, message) {
+Assertions.prototype.notEqual = function(actual, expected, message) {
   if ((actual == expected)) {
-    failTest("Expected something other than " + expected, message);
+    this.fail("Expected something other than " + expected, message);
   }
 }
 
-Assertion.prototype.true = function(condition, message) {
+Assertions.prototype.true = function(condition, message) {
   if (!condition) {
-    failTest("Condition was unexpectedly false", message);
+    this.fail("Condition was unexpectedly false", message);
   }
 }
 
-Assertion.prototype.false = function(condition, message) {
+Assertions.prototype.false = function(condition, message) {
   if (condition) {
-    failTest("Condition was unexpectedly true", message);
+    this.fail("Condition was unexpectedly true", message);
   }
 }
 
-Assertion.prototype.fail = function(message) {
+Assertions.prototype.fail = function(message, prefix) {
   if (prefix) {
     throw new TestFailure(prefix + ": " + message);
   } else {

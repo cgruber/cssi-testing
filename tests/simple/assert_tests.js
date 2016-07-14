@@ -50,4 +50,12 @@ test("demonstrate_failure", function() {
   assertFalse(true, "Some explanation");
 });
 
+test("demonstrate_error", function() {
+  var blah = {
+    name: "blah"
+  }
+  assertEqual(blah.name(), "blah"); // should error, since name() doesn't exist.
+});
+
+
 runTests(true);

@@ -93,5 +93,8 @@ function runTests(showSuccesses) {
       log(result.stack);
     }
   }
-  log("Tests: " + count + " Failed: " + failures + " Errors: " + errors);
+  log("Tests: " + count
+      + " Successes: " + (count - failures - errors)
+      + " Failures: " + failures
+      + " Errors: " + errors);
 }
