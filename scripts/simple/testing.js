@@ -32,12 +32,14 @@ function test(name, body) {
   });
 }
 
-
-var log = function(message) {
-  // Make this a function variable, so we can replace it in non-chrome.
-  console.log(message);
-}
-
+/*
+ * Setup a logging function so that the test runner can report failures and
+ * test runs.  Only do so if log is not already defined.
+ *
+ * The log() function should take a string message and push it to some
+ * output.
+ */
+ var log = (typeof log !== 'undefined')? log :setupLog();
 
 /*
  * runTests executes any registered tests, logs results to the console,
@@ -119,5 +121,18 @@ function registerTests(scope) {
         test(description, func);
       }
     }
+  }
+}
+
+/*
+ * Create a log(message) function depending on the environment.
+ */
+function setupLog() {
+  if (typeof console !== 'undefined' && typeof console.log !== 'undefined') {
+    return function(message) { console.log(message); }
+  } else if (typeof window !== 'undefined') { // any other browser
+    return function(message) { alert(message); }
+  } else {
+    throw Error("Cannot recognize any environment in which we can log output.")
   }
 }
