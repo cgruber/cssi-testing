@@ -65,10 +65,10 @@ function runTests(showSuccesses) {
     } catch(error) {
       if (error.name && error.name == "TestFailure") {
         results.push(
-            {status: "FAILED", name: testFunction.name, message: error.message});
+            {status: "FAILED", name: testFunction.name, error: error});
       } else {
         results.push(
-            {status: "ERROR", name: testFunction.name, message: error.message});
+            {status: "ERROR", name: testFunction.name, error: error});
       }
     }
   }
@@ -87,10 +87,10 @@ function runTests(showSuccesses) {
       if (result.status == "SUCCESS") {
         log(result.status + " (" + result.name + ")");
       } else {
-        log(result.status + " (" + result.name + "): " + result.message);
+        log(result.status + " (" + result.name + "): " + result.error.message);
+        log(result.error.stack);
       }
     }
-
 
     // todo: fix stack
     if (result.stack) {

@@ -7,10 +7,14 @@
  */
 
 /* An assertion failure error */
-function TestFailure(message) {
-  this.name = "TestFailure";
-  this.message = (message || "");
+class TestFailure extends Error {
+  constructor(message) {
+    super(message);
+    this.message = message;
+    this.name = 'TestFailure';
+  }
 }
+
 
 /*
  * Throws an error if the actual and expected are not equal in value
